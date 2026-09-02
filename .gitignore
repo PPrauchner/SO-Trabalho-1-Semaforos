@@ -3,3 +3,7 @@ bin/
 *.o
 *.out
 /.claude
+claude.md
+# Configuração local do agente (fica no disco, fora do versionamento)
+.claude/
+CLAUDE.md
