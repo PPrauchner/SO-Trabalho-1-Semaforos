@@ -1,0 +1,2 @@
+# O Makefile é consumido pelo make dentro do WSL: CRLF quebra as receitas.
+Makefile text eol=lf
