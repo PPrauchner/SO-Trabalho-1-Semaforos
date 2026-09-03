@@ -1,0 +1,6 @@
+# O Makefile e o script da bateria sao consumidos dentro do WSL: CRLF quebra as
+# receitas do make e o shebang do bash. Fontes C ficam LF pelo mesmo motivo.
+Makefile text eol=lf
+*.sh text eol=lf
+*.c text eol=lf
+*.h text eol=lf
