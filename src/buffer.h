@@ -18,6 +18,8 @@
 
 /* Which set of semaphores is active in a given run. */
 typedef enum {
+    SYNC_MODE_NONE,
+    SYNC_MODE_NO_MUTEX,
     SYNC_MODE_FULL,
 } SyncMode;
 
@@ -43,7 +45,8 @@ typedef struct {
 int buffer_init(Buffer *buffer, SyncMode sync_mode);
 
 /*
- * Stores an item, blocking while the buffer is full.
+ * Stores an item, blocking while the buffer is full — except under
+ * SYNC_MODE_NONE, which never blocks and may overwrite a filled slot.
  *
  * buffer: target buffer, already initialised.
  * item:   value to store.
@@ -51,7 +54,9 @@ int buffer_init(Buffer *buffer, SyncMode sync_mode);
 void buffer_put(Buffer *buffer, int item);
 
 /*
- * Removes an item, blocking while the buffer is empty.
+ * Removes an item, blocking while the buffer is empty — except under
+ * SYNC_MODE_NONE, which never blocks and may return a stale or never-written
+ * slot.
  *
  * buffer: source buffer, already initialised.
  *
