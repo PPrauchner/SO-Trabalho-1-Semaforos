@@ -55,7 +55,7 @@ void buffer_put(Buffer *buffer, int item);
 
 /*
  * Removes an item, blocking while the buffer is empty — except under
- * SYNC_MODE_NONE, which never blocks and may return a stale or never-written
+ * SYNC_MODE_NONE, which never blocks and may return a stale or still-zero
  * slot.
  *
  * buffer: source buffer, already initialised.
