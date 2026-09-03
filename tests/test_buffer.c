@@ -25,11 +25,17 @@ static void check(int condition, const char *test_name, const char *detail)
     }
 }
 
+/* Initialises a buffer in the given mode, failing the run if that is impossible. */
+static void setup_mode(Buffer *buffer, SyncMode sync_mode, const char *test_name)
+{
+    check(buffer_init(buffer, sync_mode) == 0, test_name,
+          "buffer_init returned -1");
+}
+
 /* Initialises a buffer in FULL mode, failing the run if that is impossible. */
 static void setup(Buffer *buffer, const char *test_name)
 {
-    check(buffer_init(buffer, SYNC_MODE_FULL) == 0, test_name,
-          "buffer_init returned -1");
+    setup_mode(buffer, SYNC_MODE_FULL, test_name);
 }
 
 /* Items leave the buffer in the same order they entered it. */
@@ -112,10 +118,59 @@ static void test_capacity(void)
     printf("PASS %s\n", name);
 }
 
+/*
+ * NO_MUTEX keeps the counting semaphores, so with a single thread — where the
+ * absent mutual exclusion cannot matter — the buffer still behaves as a FIFO.
+ */
+static void test_no_mutex_is_fifo_single_threaded(void)
+{
+    const char *name = "test_no_mutex_is_fifo_single_threaded";
+    Buffer buffer;
+    int i;
+
+    setup_mode(&buffer, SYNC_MODE_NO_MUTEX, name);
+
+    for (i = 0; i < BUFFER_SIZE; i++) {
+        buffer_put(&buffer, 10 + i);
+    }
+    for (i = 0; i < BUFFER_SIZE; i++) {
+        check(buffer_take(&buffer) == 10 + i, name, "item out of order");
+    }
+
+    buffer_destroy(&buffer);
+    printf("PASS %s\n", name);
+}
+
+/*
+ * NONE uses no semaphore at all. With a single thread and at most BUFFER_SIZE
+ * resident items — the only regime where the missing capacity control cannot
+ * bite — the indices still walk the array in order.
+ */
+static void test_none_is_fifo_single_threaded(void)
+{
+    const char *name = "test_none_is_fifo_single_threaded";
+    Buffer buffer;
+    int i;
+
+    setup_mode(&buffer, SYNC_MODE_NONE, name);
+
+    for (i = 0; i < BUFFER_SIZE; i++) {
+        buffer_put(&buffer, 20 + i);
+    }
+    for (i = 0; i < BUFFER_SIZE; i++) {
+        check(buffer_take(&buffer) == 20 + i, name, "item out of order");
+    }
+
+    buffer_destroy(&buffer);
+    printf("PASS %s\n", name);
+}
+
 int main(void)
 {
     test_fifo_order();
     test_wrap_around();
     test_capacity();
+    test_no_mutex_is_fifo_single_threaded();
+    test_none_is_fifo_single_threaded();
     return 0;
 }
