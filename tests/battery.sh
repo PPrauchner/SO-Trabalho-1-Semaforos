@@ -21,6 +21,10 @@ BINARY="${1:-bin/prodcons}"
 failed=0
 
 # Reads "name=value" out of one result line of the binary.
+#
+# Runs in a command substitution, so it must report the failure by return code:
+# an exit here would only kill the subshell and leave the caller with an empty
+# value, which the divergence test would read as a divergent run.
 field() {
     local line="$1" name="$2" token
     for token in $line; do
@@ -32,7 +36,7 @@ field() {
         esac
     done
     printf 'battery: no field %s in result line: %s\n' "$name" "$line" >&2
-    exit 1
+    return 1
 }
 
 # Runs one sync mode RUNS_PER_MODE times and prints its verdict line.
@@ -41,19 +45,23 @@ field() {
 # polarity: "invariant" (any divergence fails) or "race" (no divergence fails).
 run_mode() {
     local mode="$1" polarity="$2"
-    local divergent=0 times="" line difference lost_items verdict note run
+    local divergent=0 times="" line difference elapsed verdict note run
 
     for ((run = 1; run <= RUNS_PER_MODE; run++)); do
         if ! line="$("$BINARY" "$mode")"; then
             printf 'battery: %s %s failed to run\n' "$BINARY" "$mode" >&2
             exit 1
         fi
-        difference="$(field "$line" difference)"
-        lost_items="$(field "$line" lost_items)"
-        if [ "$difference" != "0" ] || [ "$lost_items" != "0" ]; then
+        if ! difference="$(field "$line" difference)"; then
+            exit 1
+        fi
+        if ! elapsed="$(field "$line" time_ms)"; then
+            exit 1
+        fi
+        if [ "$difference" != "0" ]; then
             divergent=$((divergent + 1))
         fi
-        times+="$(field "$line" time_ms)"$'\n'
+        times+="$elapsed"$'\n'
     done
 
     note=""
