@@ -77,10 +77,18 @@ static double elapsed_ms(const struct timespec *start, const struct timespec *en
 
 static SyncMode parse_sync_mode(const char *name)
 {
+    if (strcmp(name, "none") == 0) {
+        return SYNC_MODE_NONE;
+    }
+    if (strcmp(name, "no-mutex") == 0) {
+        return SYNC_MODE_NO_MUTEX;
+    }
     if (strcmp(name, "full") == 0) {
         return SYNC_MODE_FULL;
     }
-    fprintf(stderr, "prodcons: unknown sync_mode '%s' (expected: full)\n", name);
+    fprintf(stderr,
+            "prodcons: unknown sync_mode '%s' (expected: none, no-mutex, full)\n",
+            name);
     exit(EXIT_FAILURE);
 }
 
