@@ -7,3 +7,6 @@ claude.md
 # Configuração local do agente (fica no disco, fora do versionamento)
 .claude/
 CLAUDE.md
+
+# Figuras em vetorial: artefatos intermediarios do build.sh (o .md usa os PNG).
+docs/relatorio/*.pdf
