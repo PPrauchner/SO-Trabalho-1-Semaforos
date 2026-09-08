@@ -149,15 +149,16 @@ Registradas em [`docs/adr/`](docs/adr/) — em resumo:
 - **C em vez de Java** ([ADR 0001](docs/adr/0001-c-pthreads-em-vez-de-java.md)) — em C,
   `sem_wait`/`sem_post` *são* o P e o V de Dijkstra, sem camada intermediária; e o
   aquecimento do JIT contaminaria a medição de tempo, que é um dos itens pedidos.
-- **Semáforo binário em vez de `pthread_mutex_t`** — o enunciado pede semáforos, e usar
-  a mesma primitiva para contar recursos e para excluir mutuamente torna explícito que
-  *semáforo contador não é mutex*.
-- **`-O0` como flag da medição oficial**, igual para as três condições — tempos só se
-  comparam entre binários compilados com a mesma flag. `-O2` roda à parte, como achado
-  documentado (a corrida **não** desaparece sob `-O2`).
-- **Nunca `volatile` para forçar a corrida a aparecer** — `volatile` não dá
-  atomicidade, apenas inibe otimização; usá-lo faria o experimento medir o compilador
-  em vez do sistema operacional.
+- **Semáforo binário em vez de `pthread_mutex_t`**
+  ([ADR 0002](docs/adr/0002-semaforo-binario-em-vez-de-pthread-mutex.md)) — o enunciado
+  pede semáforos, e usar a mesma primitiva para contar recursos e para excluir
+  mutuamente torna explícito que *semáforo contador não é mutex*.
+- **`-O0` como flag da medição oficial** e **nunca `volatile`**
+  ([ADR 0003](docs/adr/0003-o0-como-medicao-oficial-e-nunca-volatile.md)) — tempos só se
+  comparam entre binários compilados com a mesma flag, então a flag fica fixa nas três
+  condições; `-O2` roda à parte, como achado documentado (a corrida **não** desaparece
+  sob `-O2`). E `volatile` não dá atomicidade, apenas inibe otimização: usá-lo faria o
+  experimento medir o compilador em vez do sistema operacional.
 
 ---
 
