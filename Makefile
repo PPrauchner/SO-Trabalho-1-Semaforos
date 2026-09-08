@@ -44,8 +44,14 @@ battery-opt: $(OPT_BIN)
 # Bateria completa: seam de módulo + seam de binário.
 check: test battery
 
+# Confere que as cópias dos números da bateria (figuras, tabelas, prosa) ainda
+# concordam com a saída verbatim no Apêndice A do relatório. Fica fora do `check`
+# porque verifica documentação, não o programa.
+docs-check:
+	python3 docs/relatorio/checa-numeros.py
+
 clean:
 	rm -f $(OBJECTS) $(BIN) $(OPT_BIN) $(TEST_BIN)
 	rm -rf bin
 
-.PHONY: all opt test battery battery-opt check clean
+.PHONY: all opt test battery battery-opt check docs-check clean

@@ -71,6 +71,7 @@ Alvos adicionais:
 | `make battery` | Só a bateria oficial `-O0`: 20 execuções por modo. |
 | `make opt` | Compila um segundo binário com `-O2`, em `bin/prodcons-o2`. |
 | `make battery-opt` | Roda a bateria sobre o binário `-O2` (achado à parte do relatório). |
+| `make docs-check` | Confere que os números citados nas figuras, tabelas e prosa ainda concordam com a saída da bateria registrada no relatório. |
 
 ---
 
@@ -128,7 +129,8 @@ Dois **seams**, respondendo a perguntas diferentes:
 │   ├── Enunciado.md          # enunciado original (não editar)
 │   ├── relatorio.md          # entregável, em pt-BR
 │   ├── relatorio.pdf         # composto por docs/relatorio/build.sh
-│   ├── relatorio/            # figuras, template LaTeX e pipeline pandoc/xelatex
+│   ├── relatorio/            # figuras, template LaTeX, pipeline pandoc/xelatex
+│   │                         #   e checa-numeros.py (make docs-check)
 │   └── adr/                  # decisões de arquitetura e seus porquês
 ├── CONTEXT.md                # glossário de domínio
 └── Makefile
