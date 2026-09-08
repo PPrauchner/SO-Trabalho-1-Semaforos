@@ -1,0 +1,180 @@
+% ---------------------------------------------------------------------------
+% Preâmbulo do relatório — Trabalho 1 de Sistemas Operacionais
+% ---------------------------------------------------------------------------
+
+\usepackage{polyglossia}
+\setmainlanguage{portuguese}
+
+% ---------------------------------------------------------------- tipografia
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}[Scale=0.92]
+\setmonofont{DejaVu Sans Mono}[Scale=0.80]
+\usepackage{microtype}
+
+\linespread{1.10}
+\widowpenalty=10000
+\clubpenalty=10000
+\displaywidowpenalty=10000
+\setlength{\parskip}{0.55em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{3em}
+
+% -------------------------------------------------------------------- cores
+\usepackage{xcolor}
+\definecolor{ink}{HTML}{111111}
+\definecolor{ink2}{HTML}{3F3E3B}
+\definecolor{muted}{HTML}{6E6C66}
+\definecolor{rule}{HTML}{D8D7CF}
+\definecolor{accent}{HTML}{1C5CAB}
+\definecolor{codebg}{HTML}{F6F6F3}
+\definecolor{notebg}{HTML}{F2F6FC}
+\color{ink}
+
+% ------------------------------------------------------------------ títulos
+\usepackage{titlesec}
+\titleformat{\section}
+  {\sffamily\bfseries\Large\color{ink}}{\color{accent}\thesection}{0.7em}{}
+  [\vspace{-0.55em}{\color{rule}\rule{\linewidth}{0.5pt}}]
+\titleformat{\subsection}
+  {\sffamily\bfseries\large\color{ink}}{\color{accent}\thesubsection}{0.6em}{}
+\titleformat{\subsubsection}
+  {\sffamily\bfseries\normalsize\color{ink2}}{\color{accent}\thesubsubsection}{0.5em}{}
+\titlespacing*{\section}{0pt}{2.0em}{0.8em}
+\titlespacing*{\subsection}{0pt}{1.5em}{0.5em}
+\titlespacing*{\subsubsection}{0pt}{1.1em}{0.35em}
+
+% ---------------------------------------------------------- cabeçalho/rodapé
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{rule}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\sffamily\footnotesize\color{muted}Produtor--consumidor com semáforos}
+\fancyhead[R]{\sffamily\footnotesize\color{muted}Sistemas Operacionais}
+\fancyfoot[C]{\sffamily\footnotesize\color{muted}\thepage\ / \pageref{LastPage}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand{\headrulewidth}{0pt}%
+  \fancyfoot[C]{\sffamily\footnotesize\color{muted}\thepage\ / \pageref{LastPage}}}
+
+% ------------------------------------------------------------------ tabelas
+\usepackage{booktabs}
+\usepackage{array}
+\renewcommand{\arraystretch}{1.20}
+\setlength{\tabcolsep}{7pt}
+\usepackage{caption}
+\captionsetup{font={sf,small,color=ink2},labelfont={bf,color=accent},
+              skip=6pt,justification=raggedright,singlelinecheck=false}
+\captionsetup[table]{position=above,skip=5pt}
+
+% ------------------------------------------------------------------ figuras
+\usepackage{graphicx}
+\usepackage{float}
+\floatplacement{figure}{H}
+\usepackage{placeins}
+\let\oldsection\section
+\renewcommand{\section}{\FloatBarrier\oldsection}
+
+% Um título nunca fica sozinho no pé da página.
+\usepackage{needspace}
+\usepackage{etoolbox}
+\pretocmd{\oldsection}{\Needspace*{6\baselineskip}}{}{}
+\pretocmd{\subsection}{\Needspace*{5\baselineskip}}{}{}
+\pretocmd{\subsubsection}{\Needspace*{4\baselineskip}}{}{}
+
+% --------------------------------------------------------------------- listas
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=1.35em,topsep=0.35em,itemsep=0.30em,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.6em,topsep=0.35em,itemsep=0.30em,parsep=0pt}
+
+% ----------------------------------------------------------- caixas de destaque
+\usepackage[most]{tcolorbox}
+\newtcolorbox{destaque}[1][]{
+  enhanced, breakable, sharp corners,
+  colback=notebg, colframe=accent,
+  boxrule=0pt, leftrule=2.2pt,
+  left=11pt, right=11pt, top=9pt, bottom=9pt,
+  before skip=1.0em, after skip=1.0em, #1}
+
+% Blockquotes do Markdown viram caixas de destaque.
+\renewenvironment{quote}
+  {\begin{destaque}\setlength{\parskip}{0.45em}}
+  {\end{destaque}}
+
+% ------------------------------------------------------------------- código
+\usepackage{fvextra}
+\usepackage{framed}
+\definecolor{shadecolor}{HTML}{F6F6F3}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}
+  {commandchars=\\\{\},fontsize=\footnotesize,breaklines,breakanywhere,xleftmargin=6pt}
+\renewenvironment{Shaded}
+  {\vspace{0.15em}\begin{snugshade}\setlength{\parskip}{0pt}}
+  {\end{snugshade}\vspace{0.15em}}
+
+% --------------------------------------------------------------------- links
+\usepackage[hidelinks]{hyperref}
+\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent,citecolor=accent,
+            pdftitle={Produtor-consumidor com semaforos},
+            pdfauthor={Pietro Prauchner}}
+
+% --------------------------------------------------------------------- sumário
+\usepackage{tocloft}
+\renewcommand{\cfttoctitlefont}{\sffamily\bfseries\Large\color{ink}}
+\renewcommand{\cftsecfont}{\sffamily\bfseries\color{ink}}
+\renewcommand{\cftsubsecfont}{\sffamily\color{ink2}}
+\renewcommand{\cftsecpagefont}{\sffamily\bfseries\color{muted}}
+\renewcommand{\cftsubsecpagefont}{\sffamily\color{muted}}
+\setlength{\cftbeforesecskip}{0.45em}
+\renewcommand{\cftdot}{}
+
+% ------------------------------------------------------------------- capa
+\newcommand{\capa}{%
+\begin{titlepage}
+\thispagestyle{empty}
+\raggedright
+\vspace*{1.2cm}
+
+{\sffamily\footnotesize\color{muted}%
+ ENGENHARIA DE SOFTWARE \textbullet\ 4\textordmasculine{} SEMESTRE\par}
+\vspace{0.35cm}
+{\sffamily\large\color{ink2}Sistemas Operacionais \ --- \ Trabalho 1\par}
+
+\vspace{1.1cm}
+{\color{accent}\rule{\linewidth}{2.2pt}}
+\vspace{0.9cm}
+
+{\sffamily\bfseries\fontsize{29}{34}\selectfont\color{ink}%
+ Exclusão mútua com semáforos\par}
+\vspace{0.35cm}
+{\sffamily\fontsize{17}{21}\selectfont\color{ink2}%
+ Um experimento controlado sobre o problema\\produtor--consumidor com buffer limitado\par}
+
+\vspace{0.9cm}
+{\color{rule}\rule{\linewidth}{0.6pt}}
+
+\vspace{1.3cm}
+{\itshape\large\color{ink2}%
+ Demonstração empírica de que a exclusão mútua \emph{não} é garantida sem
+ sincronização explícita, e passa a ser garantida com semáforos POSIX --- com
+ medição do custo em tempo de execução.\par}
+
+\vfill
+
+{\sffamily\footnotesize\color{muted}AUTOR\par}
+\vspace{0.15cm}
+{\sffamily\large\color{ink}Pietro Prauchner\par}
+
+\vspace{0.7cm}
+{\color{rule}\rule{\linewidth}{0.6pt}}
+\vspace{0.4cm}
+
+{\sffamily\footnotesize\color{muted}%
+\begin{tabular}{@{}ll@{}}
+Linguagem     & C11 \textbullet\ POSIX \texttt{pthreads} \textbullet\ semáforos \texttt{sem\_t}\\
+Ambiente      & WSL2 Ubuntu \textbullet\ gcc 15.2.0 \textbullet\ 6 núcleos\\
+Código-fonte  & \texttt{PPrauchner/SO-Trabalho-1-Semaforos}\\
+Data          & Setembro de 2026\\
+\end{tabular}\par}
+
+\vspace{0.6cm}
+\end{titlepage}}
