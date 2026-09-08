@@ -1,6 +1,15 @@
-# O Makefile e o script da bateria sao consumidos dentro do WSL: CRLF quebra as
-# receitas do make e o shebang do bash. Fontes C ficam LF pelo mesmo motivo.
+# Tudo neste repositorio e consumido dentro do WSL: CRLF quebra as receitas do
+# make e o shebang do bash. Fontes C, scripts Python, o Markdown que o pandoc
+# compoe e os .tex do template entram pela mesma razao — o build do relatorio le
+# todos eles de dentro do Linux.
 Makefile text eol=lf
 *.sh text eol=lf
 *.c text eol=lf
 *.h text eol=lf
+*.py text eol=lf
+*.md text eol=lf
+*.tex text eol=lf
+
+# Binarios: nunca normalizar.
+*.png binary
+*.pdf binary
